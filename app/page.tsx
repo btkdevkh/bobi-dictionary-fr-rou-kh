@@ -1,9 +1,14 @@
+"use client"
+
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import Form from "./components/Form"
 import BasicCard from "./components/BasicCard"
+import { useMenuContext } from "./contexts/MenuContext"
 
 const Home = () => {
+  const { menuOpen, toggleDrawer } = useMenuContext()
+
   return (
     <Box sx={{ mt: 1 }}>
       <Container>
@@ -17,15 +22,15 @@ const Home = () => {
             }}
           >
             <BasicCard />
-            <BasicCard />
-            <BasicCard />
           </Box>
 
           <br />
 
-          <Box>
-            <Form />
-          </Box>
+          {menuOpen && (
+            <Box>
+              <Form />
+            </Box>
+          )}
         </Box>
       </Container>
     </Box>

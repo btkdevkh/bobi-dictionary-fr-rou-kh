@@ -8,10 +8,12 @@ import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import InputBase from "@mui/material/InputBase"
-import MenuIcon from "@mui/icons-material/Menu"
 import SearchIcon from "@mui/icons-material/Search"
-import BookIcon from "@mui/icons-material/Book"
-import TemporaryDrawer from "./TemporaryDrawer"
+import TranslateIcon from "@mui/icons-material/Translate"
+import { useMenuContext } from "../contexts/MenuContext"
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd"
+// import TemporaryDrawer from "./TemporaryDrawer"
+// import MenuIcon from "@mui/icons-material/Menu"
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -56,20 +58,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const SearchAppBar = () => {
-  const [menuOpen, setMenuOpen] = React.useState(false)
-
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return
-      }
-
-      setMenuOpen(open)
-    }
+  const { toggleDrawer } = useMenuContext()
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -81,12 +70,12 @@ const SearchAppBar = () => {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 1 }}
-            onClick={toggleDrawer(true)}
+            onClick={toggleDrawer()}
           >
-            <MenuIcon />
+            <BookmarkAddIcon color="primary" />
           </IconButton>
 
-          <BookIcon />
+          <TranslateIcon />
 
           <Typography
             variant="h6"
@@ -94,7 +83,7 @@ const SearchAppBar = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            DICT. FR | ROU | KH
+            Dictionnaire FR . ROU . KH
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -108,7 +97,7 @@ const SearchAppBar = () => {
         </Toolbar>
       </AppBar>
 
-      <TemporaryDrawer menuOpen={menuOpen} toggleDrawer={toggleDrawer} />
+      {/* <TemporaryDrawer menuOpen={menuOpen} toggleDrawer={toggleDrawer} /> */}
     </Box>
   )
 }
