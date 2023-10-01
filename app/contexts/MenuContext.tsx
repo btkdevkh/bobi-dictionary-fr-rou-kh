@@ -4,12 +4,12 @@ import { createContext, useContext, ReactNode, useState } from "react"
 
 type MenuContext = {
   menuOpen: boolean
-  toggleDrawer: () => (event: React.KeyboardEvent | React.MouseEvent) => void
+  toggleDrawer: () => void
 }
 
 const MenuContext = createContext<MenuContext>({
   menuOpen: false,
-  toggleDrawer: () => () => {},
+  toggleDrawer: () => {},
 })
 
 export function useMenuContext() {
@@ -23,18 +23,9 @@ type MenuProviderProps = {
 export default function MenuProvider({ children }: MenuProviderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const toggleDrawer =
-    () => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return
-      }
-
-      setMenuOpen((prev) => !prev)
-    }
+  const toggleDrawer = () => {
+    setMenuOpen((prev) => !prev)
+  }
 
   const menuData = {
     menuOpen,

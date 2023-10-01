@@ -1,0 +1,48 @@
+$blue: rgb(0, 155, 255);
+
+.jawn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8e71c;
+  width: 10px;
+  height: 10px;
+  margin: 0 auto;
+  border-radius: 50%;
+
+  &:after,
+  &:before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  &:after {
+    left: -10px;
+    top: -5px;
+    background-color: #c7c2a6;
+    transform-origin: 15px 10px;
+    animation: axis 1s linear infinite;
+  }
+  &:before {
+    left: -25px;
+    top: -15px;
+    background-color: $blue;
+    transform-origin: 30px 20px;
+    animation: axis 2s linear infinite;
+  }
+}
+
+@keyframes axis {
+  0% {
+    transform: rotateZ(0deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: rotateZ(360deg) translate3d(0, 0, 0);
+  }
+}
+
+// source: https://codepen.io/georgehastings/pen/QyXeNR

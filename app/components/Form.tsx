@@ -15,6 +15,10 @@ import rou from "@/app/assets/images/flags/romania.png"
 import khm from "@/app/assets/images/flags/cambodia.png"
 import useDocument from "../hooks/useDocument"
 import { dictionaryCollection } from "../firebase/config"
+import { useMenuContext } from "../contexts/MenuContext"
+import Language from "../models/Language"
+import { Timestamp } from "firebase/firestore"
+import Alert from "@mui/material/Alert"
 
 enum LANG {
   ENG = "ENG",
@@ -24,21 +28,24 @@ enum LANG {
 }
 
 const Form = () => {
+  const { toggleDrawer } = useMenuContext()
   const { addDocument } = useDocument(dictionaryCollection)
 
   const [english, setEnglish] = useState("")
   const [french, setFrench] = useState("")
   const [romania, setRomania] = useState("")
   const [cambodia, setCambodia] = useState("")
+  const [err, setErr] = useState("")
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (english === "" || french === "" || romania === "" || cambodia === "") {
+    if (french === "" || romania === "") {
+      setErr("Please enter French and Romanian at least")
       return
     }
 
-    const data = {
+    const data: Language = {
       langs: [
         {
           code: LANG.ENG,
@@ -57,6 +64,7 @@ const Form = () => {
           text: cambodia.trim(),
         },
       ],
+      createdAt: Timestamp.fromMillis(Date.now()),
     }
 
     await addDocument(data)
@@ -65,6 +73,8 @@ const Form = () => {
     setFrench("")
     setRomania("")
     setCambodia("")
+
+    toggleDrawer()
   }
 
   return (
@@ -104,7 +114,12 @@ const Form = () => {
           }}
         >
           <TextField
-            label={<Image src={eng} width={18} height={18} alt="ENG" />}
+            label={
+              <Box display="flex" alignItems="center" gap={1}>
+                <Image src={eng} width={18} height={18} alt="ENG" />
+                <small>Optional</small>
+              </Box>
+            }
             size="small"
             sx={{
               color: "#fff",
@@ -134,7 +149,12 @@ const Form = () => {
           />
 
           <TextField
-            label={<Image src={khm} width={18} height={18} alt="KHM" />}
+            label={
+              <Box display="flex" alignItems="center" gap={1}>
+                <Image src={khm} width={18} height={18} alt="KHM" />
+                <small>Optional</small>
+              </Box>
+            }
             size="small"
             sx={{
               color: "#fff",
@@ -143,7 +163,13 @@ const Form = () => {
             onChange={(e) => setCambodia(e.target.value)}
           />
 
-          <Button type="submit" variant="contained" sx={{ bgcolor: "#040b2e" }}>
+          {err && <Alert severity="error">{err}</Alert>}
+
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ bgcolor: "#040b2e", ":hover": { bgcolor: "#122647" } }}
+          >
             Submit
           </Button>
         </Box>

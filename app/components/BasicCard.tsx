@@ -14,6 +14,13 @@ import eng from "@/app/assets/images/flags/united-kingdom.png"
 import fra from "@/app/assets/images/flags/france.png"
 import rou from "@/app/assets/images/flags/romania.png"
 import khm from "@/app/assets/images/flags/cambodia.png"
+import EditIcon from "@mui/icons-material/Edit"
+
+import { Timestamp } from "firebase/firestore"
+import IconButton from "@mui/material/IconButton"
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
+import useDocument from "../hooks/useDocument"
+import { dictionaryCollection } from "../firebase/config"
 
 enum LANG {
   ENG = "ENG",
@@ -44,25 +51,53 @@ type BasicCardProps = {
 }
 
 const BasicCard = ({ language }: BasicCardProps) => {
+  const { deleteDocument } = useDocument(dictionaryCollection)
+
+  const handleDelete = async (language: Language) => {
+    if (language.uid) {
+      if (confirm("Are you sur to delete it ?")) {
+        await deleteDocument(language)
+      }
+    }
+  }
+
   return (
-    <Grid item>
+    <Grid item xs={12} md={6} lg={4} xl={3}>
       <Card
         sx={{
           minWidth: 275,
-          bgcolor: "#ddd",
+          color: "#fff",
+          bgcolor: "#081e42",
           borderRadius: 3,
           flexBasis: "100%",
-          mb: 1,
+          height: 250,
         }}
       >
         <CardContent>
-          <Typography
-            sx={{ fontSize: 14, textAlign: "left" }}
-            color="text.secondary"
-            gutterBottom
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Word of the Day
-          </Typography>
+            <Typography
+              sx={{ fontSize: 14, textAlign: "left", color: "#fff" }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Published:{" "}
+              {Timestamp.fromMillis(language.createdAt.toMillis())
+                .toDate()
+                .toDateString()}
+            </Typography>
+
+            <IconButton onClick={() => handleDelete(language)}>
+              <DeleteOutlineIcon
+                fontSize="small"
+                color="error"
+                sx={{ opacity: 0.5 }}
+              />
+            </IconButton>
+          </Box>
 
           <Divider />
 
@@ -85,7 +120,7 @@ const BasicCard = ({ language }: BasicCardProps) => {
                       component="div"
                       sx={{ fontSize: 15 }}
                     >
-                      {lang.text}
+                      {lang.text ? lang.text : "n/a"}
                     </Typography>
                   </Box>
                 </Box>
