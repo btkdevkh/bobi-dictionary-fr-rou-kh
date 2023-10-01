@@ -24,10 +24,10 @@ import { dictionaryCollection } from "../firebase/config"
 import { useMenuContext } from "../contexts/MenuContext"
 
 enum LANG {
-  ENG = "ENG",
-  FRA = "FRA",
   ROU = "ROU",
   KHM = "KHM",
+  FRA = "FRA",
+  ENG = "ENG",
 }
 
 const bull = (lang: string) => (
@@ -35,14 +35,14 @@ const bull = (lang: string) => (
     component="span"
     sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
   >
-    {lang === LANG.ENG ? (
-      <Image src={eng} width={25} height={25} alt={lang} />
+    {lang === LANG.ROU ? (
+      <Image src={rou} width={25} height={25} alt={lang} />
+    ) : lang === LANG.KHM ? (
+      <Image src={khm} width={25} height={25} alt={lang} />
     ) : lang === LANG.FRA ? (
       <Image src={fra} width={25} height={25} alt={lang} />
-    ) : lang === LANG.ROU ? (
-      <Image src={rou} width={25} height={25} alt={lang} />
     ) : (
-      <Image src={khm} width={25} height={25} alt={lang} />
+      <Image src={eng} width={25} height={25} alt={lang} />
     )}
   </Box>
 )
@@ -117,27 +117,29 @@ const BasicCard = ({ language }: BasicCardProps) => {
 
           {language.langs &&
             language.langs.length > 0 &&
-            language.langs.map((lang) => {
-              return (
-                <Box key={lang.code} sx={{ mb: 0.5 }}>
-                  <Box
-                    display="flex"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                  >
-                    <div style={{ width: 40 }}>{bull(lang.code)}</div>
-
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{ fontSize: 15 }}
+            language.langs
+              .sort((a, b) => b.code.localeCompare(a.code))
+              .map((lang) => {
+                return (
+                  <Box key={lang.code} sx={{ mb: 0.5 }}>
+                    <Box
+                      display="flex"
+                      justifyContent="flex-start"
+                      alignItems="center"
                     >
-                      {lang.text ? lang.text : "n/a"}
-                    </Typography>
+                      <div style={{ width: 40 }}>{bull(lang.code)}</div>
+
+                      <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{ fontSize: 15 }}
+                      >
+                        {lang.text ? lang.text : "n/a"}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              )
-            })}
+                )
+              })}
         </CardContent>
       </Card>
     </Grid>

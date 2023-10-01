@@ -49,7 +49,7 @@ const Form = () => {
     e.preventDefault()
 
     if (french === "" || romania === "") {
-      setErr("Please enter French and Romanian at least")
+      setErr("Please enter Romanian and French at least")
       return
     }
 
@@ -129,18 +129,13 @@ const Form = () => {
           }}
         >
           <TextField
-            label={
-              <Box display="flex" alignItems="center" gap={1}>
-                <Image src={eng} width={18} height={18} alt="ENG" />
-                <small>Optional</small>
-              </Box>
-            }
+            label={<Image src={rou} width={18} height={18} alt="ROU" />}
             size="small"
             sx={{
               color: "#fff",
             }}
-            value={english}
-            onChange={(e) => setEnglish(e.target.value)}
+            value={romania}
+            onChange={(e) => setRomania(e.target.value)}
           />
 
           <TextField
@@ -151,16 +146,6 @@ const Form = () => {
             }}
             value={french}
             onChange={(e) => setFrench(e.target.value)}
-          />
-
-          <TextField
-            label={<Image src={rou} width={18} height={18} alt="ROU" />}
-            size="small"
-            sx={{
-              color: "#fff",
-            }}
-            value={romania}
-            onChange={(e) => setRomania(e.target.value)}
           />
 
           <TextField
@@ -176,6 +161,21 @@ const Form = () => {
             }}
             value={cambodia}
             onChange={(e) => setCambodia(e.target.value)}
+          />
+
+          <TextField
+            label={
+              <Box display="flex" alignItems="center" gap={1}>
+                <Image src={eng} width={18} height={18} alt="ENG" />
+                <small>Optional</small>
+              </Box>
+            }
+            size="small"
+            sx={{
+              color: "#fff",
+            }}
+            value={english}
+            onChange={(e) => setEnglish(e.target.value)}
           />
 
           {err && <Alert severity="error">{err}</Alert>}
