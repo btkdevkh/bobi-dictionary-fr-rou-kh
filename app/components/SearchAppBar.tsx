@@ -66,8 +66,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const SearchAppBar = () => {
-  const { toggleDrawer } = useMenuContext()
   const { handleSearchTerm } = useSearchContext()
+  const { toggleDrawer, handleSetDataToNull } = useMenuContext()
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -79,7 +79,10 @@ const SearchAppBar = () => {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 1 }}
-            onClick={() => toggleDrawer()}
+            onClick={() => {
+              toggleDrawer()
+              handleSetDataToNull()
+            }}
           >
             <BookmarkAddIcon color="primary" titleAccess="Add Word/Phrase" />
           </IconButton>

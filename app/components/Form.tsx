@@ -28,13 +28,21 @@ enum LANG {
 }
 
 const Form = () => {
-  const { toggleDrawer } = useMenuContext()
-  const { addDocument } = useDocument(dictionaryCollection)
+  const { toggleDrawer, lang } = useMenuContext()
+  const { addDocument, updateDocument } = useDocument(dictionaryCollection)
 
-  const [english, setEnglish] = useState("")
-  const [french, setFrench] = useState("")
-  const [romania, setRomania] = useState("")
-  const [cambodia, setCambodia] = useState("")
+  const [english, setEnglish] = useState(
+    lang ? lang.langs.find((l) => l.code === "ENG")?.text : ""
+  )
+  const [french, setFrench] = useState(
+    lang ? lang.langs.find((l) => l.code === "FRA")?.text : ""
+  )
+  const [romania, setRomania] = useState(
+    lang ? lang.langs.find((l) => l.code === "ROU")?.text : ""
+  )
+  const [cambodia, setCambodia] = useState(
+    lang ? lang.langs.find((l) => l.code === "KHM")?.text : ""
+  )
   const [err, setErr] = useState("")
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -49,22 +57,29 @@ const Form = () => {
       langs: [
         {
           code: LANG.ENG,
-          text: english.trim(),
+          text: english ? english.trim() : "",
         },
         {
           code: LANG.FRA,
-          text: french.trim(),
+          text: french ? french.trim() : "",
         },
         {
           code: LANG.ROU,
-          text: romania.trim(),
+          text: romania ? romania.trim() : "",
         },
         {
           code: LANG.KHM,
-          text: cambodia.trim(),
+          text: cambodia ? cambodia.trim() : "",
         },
       ],
       createdAt: Timestamp.fromMillis(Date.now()),
+    }
+
+    if (lang && lang.uid) {
+      data.uid = lang.uid
+      await updateDocument(data)
+      toggleDrawer()
+      return
     }
 
     await addDocument(data)
@@ -101,7 +116,7 @@ const Form = () => {
             textAlign: "center",
           }}
         >
-          Add New Word / Phrase
+          {lang?.uid ? `Edit this Word / Phrase` : "Add New Word / Phrase"}
         </Typography>
       </Box>
 

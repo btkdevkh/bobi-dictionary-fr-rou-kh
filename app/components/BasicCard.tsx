@@ -21,6 +21,7 @@ import IconButton from "@mui/material/IconButton"
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
 import useDocument from "../hooks/useDocument"
 import { dictionaryCollection } from "../firebase/config"
+import { useMenuContext } from "../contexts/MenuContext"
 
 enum LANG {
   ENG = "ENG",
@@ -51,6 +52,7 @@ type BasicCardProps = {
 }
 
 const BasicCard = ({ language }: BasicCardProps) => {
+  const { toggleDrawer, handleGetDataToUpdate } = useMenuContext()
   const { deleteDocument } = useDocument(dictionaryCollection)
 
   const handleDelete = async (language: Language) => {
@@ -59,6 +61,11 @@ const BasicCard = ({ language }: BasicCardProps) => {
         await deleteDocument(language)
       }
     }
+  }
+
+  const handleUpdate = async (language: Language) => {
+    toggleDrawer()
+    handleGetDataToUpdate(language)
   }
 
   return (
@@ -90,13 +97,18 @@ const BasicCard = ({ language }: BasicCardProps) => {
                 .toDateString()}
             </Typography>
 
-            <IconButton onClick={() => handleDelete(language)}>
-              <DeleteOutlineIcon
-                fontSize="small"
-                color="error"
-                sx={{ opacity: 0.5 }}
-              />
-            </IconButton>
+            <Box>
+              <IconButton onClick={() => handleUpdate(language)}>
+                <EditIcon fontSize="small" color="info" sx={{ opacity: 0.5 }} />
+              </IconButton>
+              <IconButton onClick={() => handleDelete(language)}>
+                <DeleteOutlineIcon
+                  fontSize="small"
+                  color="info"
+                  sx={{ opacity: 0.1 }}
+                />
+              </IconButton>
+            </Box>
           </Box>
 
           <Divider />
